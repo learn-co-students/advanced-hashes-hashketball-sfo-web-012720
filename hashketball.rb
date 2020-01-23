@@ -104,10 +104,10 @@ def player_numbers(team_name)
 end
 
 def player_stats(player_name)
-  game_hash.each do |place, team|
-    team.each do |attribute, data|
+  game_hash.values.each do |team|
+    team.each do |attribute, stats|
       if attribute == :players
-        data.each do |player|
+        stats.each do |player|
           if player[:player_name] == player_name
             player.delete(:player_name)
             return player
