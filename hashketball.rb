@@ -59,21 +59,28 @@ end
 
 
 
-def find_player_data(name, data)
+def collect_players
   
-home_players = data[:home][:players]
-away_players = data[:away][:players]
-players = home_players + away_players
-
-for player in players
-  
-  if name == player[:player_name]
-    
-    return player
-  
-  end
+  data = game_hash
+  home_players = data[:home][:players]
+  away_players = data[:away][:players]
+  players = home_players + away_players
+  players
 
 end
+
+
+def find_player_data(name, data)
+
+  for player in collect_players
+  
+    if name == player[:player_name]
+    
+      return player
+  
+    end
+
+  end
 
 end
 
@@ -207,28 +214,118 @@ end
 
 
 
-def most_points_scored
+def winning_team
   
-  output = 
-  points = 0
+  homeScore = 0
+  awayScore = 0
   
   data = game_hash
+  home_players = data[:home][:players]
+  away_players = data[:away][:players]
   
-  for team in data
+  for home_player in home_players
+    homeScore += home_player[:points]
+    
+  end
+  
+  
+  for away_player in away_players
+    awayScore += away_player[:points]
+    
+  end
+  
+  if homeScore > awayScore
+    
+    return data[:home][:team_name]
+    
+  else
+    
+    return data[:away][:team_name]
+    
+  end
+
+end
+
+def most_points_scored
+  
+  data = game_hash
+  top_player = 'Michael Jordan'
+  top_score = 0
+  
+  
+  for player in collect_players
+    
+    if player[:points] > top_score
       
-    for player in team[1][:players]
+      top_player = player[:player_name]
+      top_score  = player[:points]
+  
+    end
+  
+  end  
+    
+  top_player
+  
+end
+  
+
+
+def player_with_longest_name
+  
+  data = collect_players
+  longName = ""
+  
+  for player in data
+  
+    if player[:player_name].size > longName.size
       
-      if player[:points] > points
-        
-        points = player[:points]
-        output = player[:player_name]
-        
-      end
+      longName = player[:player_name]
       
     end
     
   end
+    
+  longName
   
-  output
-
 end
+  
+  
+
+def top_steals
+  
+  data = game_hash
+  top_player = 'Michael Jordan'
+  top_steals = 0
+  
+  
+  for player in collect_players
+    
+    if player[:steals] > top_steals
+      
+      top_player = player[:player_name]
+      top_steals  = player[:steals]
+  
+    end
+  
+  end  
+    
+  top_player
+  
+end
+
+
+
+def long_name_steals_a_ton?
+  
+  if player_with_longest_name == top_steals
+    
+    return true
+    
+  else
+    
+    return false
+    
+  end
+  
+end
+  
